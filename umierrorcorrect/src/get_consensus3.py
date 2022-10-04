@@ -78,7 +78,8 @@ class consensus_read:
             a.cigar = self.get_cigar()
             a.query_qualities = pysam.qualitystring_to_array(self.qual)
             a.tags = (("NM", self.nmtag), ("RG", "L1"))
-            f.write(a)
+            if len(a.query_sequence) == a.infer_query_length():
+                f.write(a)
         else:
             j=0
             for i,s in enumerate(self.splits):
@@ -106,7 +107,8 @@ class consensus_read:
                     a.cigar = cigar
                     a.query_qualities = pysam.qualitystring_to_array(self.qual)[start:end]
                     a.tags = (("NM", self.nmtag), ("RG", "L1"))
-                    f.write(a)
+                    if len(a.query_sequence) == a.infer_query_length():
+                        f.write(a)
             #s=self.splits[-1]
             #a = pysam.AlignedSegment()
             #a.query_name = self.name + '_b'
